@@ -1,0 +1,48 @@
+version: "3.9"
+
+services:
+  gui-kiosk:
+    hostname: gui-kiosk
+    container_name: gui-kiosk
+
+    build:
+      context: .
+      args:
+        APP: ${APP:-blender}
+
+    environment:
+      APP: ${APP:-blender}
+
+    tmpfs:
+      - /tmp
+
+    labels:
+      - "traefik.enable=true"
+
+      # Traefik routing for this kiosk
+      - "traefik.http.routers.gui-kiosk.rule=Host(`host.example.com`)"
+      - "traefik.http.routers.gui-kiosk.entrypoints=websecure"
+      - "traefik.http.routers.gui-kiosk.tls=true"
+      - "traefik.http.routers.gui-kiosk.tls.certresolver=letsencrypt"
+
+      # Traefik container network (shared)
+      - "traefik.docker.network=web"
+
+      # Map port inside container to Traefik
+      - "traefik.http.services.gui-kiosk.loadbalancer.server.port=6080"
+
+      # Rewrite root / to noVNC path
+      - "traefik.http.routers.gui-kiosk.middlewares=kiosk-frontend"
+      - "traefik.http.middlewares.kiosk-frontend.replacepathregex.regex=^/$$"
+      - "traefik.http.middlewares.kiosk-frontend.replacepathregex.replacement=/vnc.html"
+
+    networks:
+      - web
+      - default
+
+    restart: unless-stopped
+
+networks:
+  web:
+    external: true
+    name: web

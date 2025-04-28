@@ -1,0 +1,21 @@
+# Vendor binaries and dynamic content
+vendor/*.tar.xz
+vendor/*.whl
+vendor/*.zip
+vendor/.checksums
+
+# Application runtime logs
+app/logs/
+*.log
+
+# Python cache (if scripts/tools are added later)
+__pycache__/
+*.pyc
+
+# Environment overrides and secrets
+.env
+
+# Optional future packaging dirs
+build/
+dist/
+.junkfiles/
