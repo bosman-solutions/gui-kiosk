@@ -1,8 +1,5 @@
 # Vendor binaries and dynamic content
-vendor/*.tar.xz
-vendor/*.whl
-vendor/*.zip
-vendor/.checksums
+vendor/*
 
 # Application runtime logs
 app/logs/
@@ -19,3 +16,4 @@ __pycache__/
 build/
 dist/
 .junkfiles/
+.vscode/
